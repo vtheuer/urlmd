@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+    <title>UrlMd</title>
+    <link id="theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+    <style>
+      .buttons {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      .buttons button {
+        display: block;
+        padding: 10px;
+      }
+
+      .buttons a {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <article id="container"></article>
+    <div class="buttons">
+      <button id="light-switch" data-theme="light">☀️</button>
+      <a id="edit" target="_blank"><button>✏️</button></a>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma-d-min.js"></script>
+  <script type="text/javascript">
+  const themeLink = document.getElementById('theme');
+  const lightSwitch = document.getElementById('light-switch');
+  const edit = document.getElementById('edit');
+
+  lightSwitch.addEventListener('click', () => {
+    const currentTheme = lightSwitch.dataset.theme;
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+    theme.href = theme.href.replace(currentTheme, newTheme);
+    lightSwitch.innerText = newTheme === 'light' ? '☀️' : '🌙';
+    lightSwitch.dataset.theme = newTheme;
+  });
+
+  edit.href = `i.html${location.hash}`;
+
+  LZMA.decompress(Base64.toUint8Array(location.hash.substring(1)), r => {
+    document.getElementById('container').innerHTML = marked(r);
+
+    const firstTitle = document.querySelector('h1, h2, h3');
+    if(firstTitle) {
+      document.title = firstTitle.innerText;
+    }
+  });
+  </script>
+</html>

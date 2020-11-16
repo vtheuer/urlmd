@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>">
+    <title>UrlMd • editor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+    <style>
+      #input {
+        min-height: 50vh !important;
+        font-family: monospace;
+      }
+
+      #make {
+        display: block;
+        margin: 0 auto;
+      }
+
+      #result {
+        display: block;
+        word-break: break-all;
+        font-size: 85%;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="input"></textarea>
+    <button id="make">Make link</button>
+    <p><a id="result" target="_blank"></a></p>
+    <p id="info"></p>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma_worker-min.js"></script>
+  <script type="text/javascript">
+    const input = document.getElementById('input');
+    const result = document.getElementById('result');
+    const info = document.getElementById('info');
+
+    const {hash} = location;
+    if (hash) {
+      LZMA.decompress(Base64.toUint8Array(hash.substring(1)), r => input.value = r);
+    }
+
+    document.getElementById('make').addEventListener('click', () => LZMA.compress(input.value, 5, bytes => {
+      const compressed = Base64.fromUint8Array(new Uint8Array(bytes));
+      result.href = `o.html#${compressed}`;
+      result.innerText = result.href;
+      info.innerText = `Compression rate : ${(100 * compressed.length / input.value.length).toFixed(1)}%`
+    }));
+  </script>
+</html>
