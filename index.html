@@ -45,7 +45,7 @@
 
     document.getElementById('make').addEventListener('click', () => LZMA.compress(input.value, 5, bytes => {
       const compressed = Base64.fromUint8Array(new Uint8Array(bytes));
-      result.href = `o.html#${compressed}`;
+      result.href = `o/#${compressed}`;
       result.innerText = result.href;
       info.innerText = `Compression rate : ${(100 * compressed.length / input.value.length).toFixed(1)}%`
     }));

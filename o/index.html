@@ -7,6 +7,10 @@
     <title>UrlMd</title>
     <link id="theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
     <style>
+      * {
+        transition: background-color .25s, color .25s;
+      }
+
       .buttons {
         position: fixed;
         top: 1rem;
@@ -47,7 +51,7 @@
     lightSwitch.dataset.theme = newTheme;
   });
 
-  edit.href = `i.html${location.hash}`;
+  edit.href = `../${location.hash}`;
 
   LZMA.decompress(Base64.toUint8Array(location.hash.substring(1)), r => {
     document.getElementById('container').innerHTML = marked(r);
