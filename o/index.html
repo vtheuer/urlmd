@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
     <title>UrlMd</title>
-    <link id="theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.min.css">
+    <link id="theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
     <style>
       * {
         transition: background-color .25s, color .25s;
@@ -30,7 +30,7 @@
   <body>
     <article id="container"></article>
     <div class="buttons">
-      <button id="light-switch" data-theme="light">☀️</button>
+      <button id="lightswitch">🌙</button>
       <a id="edit" target="_blank"><button>✏️</button></a>
     </div>
   </body>
@@ -38,28 +38,27 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma-d-min.js"></script>
   <script type="text/javascript">
-  const themeLink = document.getElementById('theme');
-  const lightSwitch = document.getElementById('light-switch');
-  const edit = document.getElementById('edit');
+    const themeRegex = /(?:dark|light)(?=.min.css)/;
 
-  lightSwitch.addEventListener('click', () => {
-    const currentTheme = lightSwitch.dataset.theme;
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-    theme.href = theme.href.replace(currentTheme, newTheme);
-    lightSwitch.innerText = newTheme === 'light' ? '☀️' : '🌙';
-    lightSwitch.dataset.theme = newTheme;
-  });
-
-  edit.href = `../${location.hash}`;
-
-  LZMA.decompress(Base64.toUint8Array(location.hash.substring(1)), r => {
-    document.getElementById('container').innerHTML = marked(r);
-
-    const firstTitle = document.querySelector('h1, h2, h3');
-    if(firstTitle) {
-      document.title = firstTitle.innerText;
+    function setTheme(newTheme) {
+      theme.href = theme.href.replace(themeRegex, newTheme);
+      lightswitch.innerText = newTheme === 'light' ? '☀️' : '🌙';
+      localStorage.setItem('theme', newTheme);
     }
-  });
+
+    setTheme(localStorage.getItem('theme') || 'dark');
+
+    lightswitch.addEventListener('click', () => setTheme(themeRegex.exec(theme.href)[0] === 'light' ? 'dark' : 'light'));
+
+    edit.href = `../${location.hash}`;
+
+    LZMA.decompress(Base64.toUint8Array(location.hash.substring(1)), r => {
+      container.innerHTML = marked(r);
+
+      const firstTitle = document.querySelector('h1, h2, h3');
+      if(firstTitle) {
+        document.title = firstTitle.innerText;
+      }
+    });
   </script>
 </html>

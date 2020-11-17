@@ -34,16 +34,12 @@
   <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma_worker-min.js"></script>
   <script type="text/javascript">
-    const input = document.getElementById('input');
-    const result = document.getElementById('result');
-    const info = document.getElementById('info');
-
     const {hash} = location;
     if (hash) {
       LZMA.decompress(Base64.toUint8Array(hash.substring(1)), r => input.value = r);
     }
 
-    document.getElementById('make').addEventListener('click', () => LZMA.compress(input.value, 5, bytes => {
+    make.addEventListener('click', () => LZMA.compress(input.value, 5, bytes => {
       const compressed = Base64.fromUint8Array(new Uint8Array(bytes));
       result.href = `o/#${compressed}`;
       result.innerText = result.href;
