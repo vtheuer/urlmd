@@ -39,13 +39,20 @@
       LZMA.decompress(Base64.toUint8Array(hash.substring(1)), r => input.value = r);
     }
 
-    make.addEventListener('click', {
+    function makeLink() {
       LZMA.compress(input.value, 5, bytes => {
         const compressed = Base64.fromUint8Array(new Uint8Array(bytes));
         location.hash = compressed;
         result.innerText = result.href = `o/#${compressed}`;
         info.innerText = `Compression rate : ${(100 * compressed.length / input.value.length).toFixed(1)}%`
       });
+    }
+
+    make.addEventListener('click', makeLink);
+    let keypressTimeout;
+    input.addEventListener('keypress', () => {
+      clearTimeout(keypressTimeout);
+      keypressTimeout = setTimeout(makeLink, 1000);
     });
   </script>
 </html>
