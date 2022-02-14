@@ -35,7 +35,7 @@
     </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@4.0.12/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma-d-min.js"></script>
   <script type="text/javascript">
     const themeRegex = /(?:dark|light)(?=.min.css)/;
@@ -53,7 +53,7 @@
     edit.href = `../${location.hash}`;
 
     LZMA.decompress(Base64.toUint8Array(location.hash.substring(1)), r => {
-      container.innerHTML = marked(r);
+      container.innerHTML = marked.marked(r);
 
       const firstTitle = document.querySelector('h1, h2, h3');
       if(firstTitle) {
